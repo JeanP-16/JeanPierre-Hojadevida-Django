@@ -18,23 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.http import HttpResponse
-from django.contrib.auth import get_user_model
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('cv.urls')),
 ]
 
-
-def crear_admin(request):
-    User = get_user_model()
-    # CAMBIA ESTOS DATOS por los que TÚ creaste
-    User.objects.create_superuser('JeanPierre', 'florespilosojeanpierre@gmail.com', 'Jean21.')
-    return HttpResponse('Usuario admin creado')
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('crear-admin-temporal/', crear_admin),  # ESTA LÍNEA
-    # tus otras rutas...
-]
