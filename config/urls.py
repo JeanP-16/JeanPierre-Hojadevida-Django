@@ -24,3 +24,18 @@ urlpatterns = [
     path('', include('cv.urls')),
 ]
 
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+
+def crear_admin(request):
+    User = get_user_model()
+    if not User.objects.filter(username='JeanS').exists():
+        User.objects.create_superuser('JeanS', 'florespilosojeanpierre@gmail.com', 'Jampi21.')
+        return HttpResponse('Usuario JeanS creado exitosamente')
+    return HttpResponse('Usuario JeanS ya existe')
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('crear-admin-temp/', crear_admin),
+    path('', include('cv.urls')),
+]
