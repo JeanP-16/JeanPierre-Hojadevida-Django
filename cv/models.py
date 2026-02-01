@@ -85,6 +85,7 @@ class Perfil(models.Model):
 # MODELO: Educación
 # ============================================
 class Educacion(models.Model):
+    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='educacion')  # ← AGREGAR ESTA LÍNEA
     institucion = models.CharField(max_length=150)
     titulo = models.CharField(max_length=150)
     fecha_inicio = models.DateField(validators=[validate_certificate_year])
@@ -102,6 +103,7 @@ class Educacion(models.Model):
 # MODELO: Experiencia Laboral
 # ============================================
 class Experiencia(models.Model):
+    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='experiencia')  # ← AGREGAR ESTA LÍNEA
     empresa = models.CharField(max_length=150)
     cargo = models.CharField(max_length=150)
     fecha_inicio = models.DateField(validators=[validate_certificate_year])
@@ -118,16 +120,6 @@ class Experiencia(models.Model):
 # ============================================
 # MODELO: Habilidad
 # ============================================
-class Habilidad(models.Model):
-    nombre = models.CharField(max_length=100)
-    nivel = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-
-    class Meta:
-        verbose_name_plural = "Habilidades"
-        ordering = ['-nivel', 'nombre']
-
-    def __str__(self):
-        return f"{self.nombre} (Nivel {self.nivel}/5)"
 
 # ============================================
 # MODELO: Certificado (CURSOS)
@@ -235,3 +227,21 @@ class Garage(models.Model):
 
     def __str__(self):
         return f"{self.nombreproducto} - ${self.valordelbien}"
+    
+class Habilidad(models.Model):
+    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='habilidades')
+    categoria = models.CharField(max_length=100, help_text="Ej: Frontend, Backend, Database, DevOps")
+    nombre = models.CharField(max_length=100, help_text="Ej: Python, Django, React")
+    nivel = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="Porcentaje de dominio (0-100)"
+    )
+    orden = models.IntegerField(default=0, help_text="Orden de aparición")
+    
+    class Meta:
+        ordering = ['orden', 'categoria', 'nombre']
+        verbose_name = 'Habilidad'
+        verbose_name_plural = 'Habilidades'
+    
+    def __str__(self):
+        return f"{self.nombre} ({self.categoria}) - {self.nivel}%"

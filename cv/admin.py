@@ -7,6 +7,7 @@ import tempfile
 import os
 import io
 from pdf2image import convert_from_path
+from .models import Habilidad
 
 from .models import (
     Perfil, Educacion, Experiencia, Habilidad,
@@ -100,15 +101,25 @@ class ExperienciaAdmin(admin.ModelAdmin):
 # ============================================
 @admin.register(Habilidad)
 class HabilidadAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'nivel', 'nivel_visual')
-    search_fields = ('nombre',)
-    list_filter = ('nivel',)
+    list_display = ('nombre', 'categoria', 'nivel', 'perfil', 'orden')
+    list_filter = ('categoria', 'perfil')
+    search_fields = ('nombre', 'categoria')
+    list_editable = ('orden', 'nivel')
+    ordering = ('orden', 'categoria', 'nombre')
     
-    def nivel_visual(self, obj):
-        estrellas = '⭐' * obj.nivel
-        return format_html('<span style="font-size: 1.2em;">{}</span>', estrellas)
-    
-    nivel_visual.short_description = 'Nivel'
+    fieldsets = (
+        ('Información Principal', {
+            'fields': ('perfil', 'categoria', 'nombre')
+        }),
+        ('Nivel de Dominio', {
+            'fields': ('nivel',),
+            'description': 'Indica tu nivel de dominio en porcentaje (0-100%)'
+        }),
+        ('Orden de Aparición', {
+            'fields': ('orden',),
+            'description': 'Número más bajo aparece primero'
+        }),
+    )
 
 
 # ============================================
@@ -297,3 +308,4 @@ class GarageAdmin(admin.ModelAdmin):
 admin.site.site_header = '🎓 Sistema CV - Panel de Administración'
 admin.site.site_title = 'CV Admin'
 admin.site.index_title = 'Gestión de Hoja de Vida Profesional'
+
