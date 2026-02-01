@@ -3,389 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ perfil.nombre }} | Portafolio Interactivo</title>
+    <title>{{ perfil.nombre }} | Portafolio Profesional</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     
-
     <style>
         :root {
-            --primary: #FF8C42; 
-            --secondary: #2c3e50;
-            --bg-light: #F2F5FA;
-            --white: #ffffff;
+            /* COLORES INTENSOS */
+            --primary: #FF8C42;
+            --primary-light: #FFB47A;
+            --secondary: #6366f1;
+            --accent: #10b981;
+            --purple: #a855f7;
+            --pink: #ec4899;
+            --cyan: #06b6d4;
+            
+            --bg-card: rgba(255, 255, 255, 0.95);
+            --text-dark: #1e293b;
+            --text-medium: #475569;
+            --text-light: #94a3b8;
+            
             --sidebar-w: 290px;
+        }
+
+        /* MODO OSCURO */
+        body.dark-mode {
+            --bg-card: rgba(30, 41, 59, 0.95);
+            --text-dark: #f1f5f9;
+            --text-medium: #cbd5e1;
+            --text-light: #94a3b8;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%) !important;
+        }
+
+        body.dark-mode .sidebar {
+            background: rgba(30, 41, 59, 0.98);
+            border-right: 2px solid var(--primary);
+        }
+
+        body.dark-mode .stat-card,
+        body.dark-mode .about-card,
+        body.dark-mode .info-card,
+        body.dark-mode .entry-card,
+        body.dark-mode .fancy-card {
+            background: rgba(30, 41, 59, 0.95) !important;
+            border-color: rgba(255, 140, 66, 0.2) !important;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-light);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1625 0%, #2d1b3d 50%, #1e2a3a 100%);
             overflow: hidden;
             height: 100vh;
             display: flex;
+            position: relative;
+            transition: background 0.3s ease;
         }
 
+        /* ICONOS TECNOLÓGICOS FLOTANTES */
+        .particles-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .tech-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.15;
+            animation: floatTech 25s linear infinite;
+        }
+
+        @keyframes floatTech {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.15; }
+            90% { opacity: 0.15; }
+            100% {
+                transform: translateY(-100px) translateX(150px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .tech-icon.code { color: #FF8C42; }
+        .tech-icon.database { color: #10b981; }
+        .tech-icon.cloud { color: #06b6d4; }
+        .tech-icon.network { color: #6366f1; }
+        .tech-icon.security { color: #ec4899; }
+        .tech-icon.ai { color: #a855f7; }
+
+        /* SIDEBAR */
         .sidebar {
             width: var(--sidebar-w);
             height: 100%;
-            background: linear-gradient(180deg, #2c3e50 0%, #000000 100%);
-            color: white;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-right: 2px solid var(--primary);
+            box-shadow: 4px 0 30px rgba(255, 140, 66, 0.4);
+            color: var(--text-dark);
             display: flex;
             flex-direction: column;
             z-index: 1000;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
             overflow-y: auto;
-            scrollbar-width: none;
+            transition: all 0.3s ease;
         }
-        .sidebar::-webkit-scrollbar { display: none; }
+
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
 
         .profile-area {
-            padding: 40px 20px;
+            padding: 30px 20px;
             text-align: center;
-            background: rgba(255,255,255,0.05);
-            margin-bottom: 20px;
-        }
-
-        .avatar-container {
-            width: 120px; height: 120px; margin: 0 auto 15px;
-            border-radius: 50%; padding: 5px;
-            border: 2px dashed var(--primary);
-            transition: transform 0.5s ease;
-        }
-        .avatar-container:hover { transform: rotate(360deg) scale(1.1); }
-        .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-
-        .profile-name { font-weight: 700; font-size: 1.2rem; margin-bottom: 5px; color: white; }
-        .profile-role { font-size: 0.8rem; color: #bbb; letter-spacing: 1px; }
-
-        .nav-menu { flex-grow: 1; padding: 0 15px; }
-        
-        .nav-btn {
-            width: 100%; padding: 12px 15px; margin-bottom: 10px;
-            border: none; background: transparent; color: #ccc;
-            text-align: left; font-size: 0.95rem; border-radius: 10px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; align-items: center; gap: 10px;
-        }
-
-        .nav-btn:hover { background: rgba(255, 140, 66, 0.2); color: var(--primary); transform: translateX(10px); }
-        .nav-btn.active { background: var(--primary); color: white; transform: scale(1.05); box-shadow: 0 5px 15px rgba(255, 140, 66, 0.4); }
-
-        .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .btn-download {
-            width: 100%; padding: 12px; border-radius: 30px;
-            background: white; color: var(--secondary); font-weight: 700;
-            border: none; transition: 0.3s;
-        }
-        .btn-download:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(255,255,255,0.3); background: var(--primary); color: white; }
-
-        .main-content {
-            flex-grow: 1; padding: 30px 50px;
-            width: calc(100% - var(--sidebar-w));
-            overflow-y: auto; background-color: var(--bg-light);
+            border-bottom: 1px solid rgba(255,140,66,0.2);
             position: relative;
         }
 
-        .page-section { display: none; }
-        .page-section.active { display: block; }
+        /* BOTÓN DE MODO OSCURO */
+        .theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255,140,66,0.3);
+            transition: all 0.3s ease;
+        }
 
-        .section-header { 
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 40px; padding-bottom: 15px; border-bottom: 2px solid #ddd;
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(180deg);
         }
-        .section-title { font-weight: 800; font-size: 2rem; color: var(--secondary); text-transform: uppercase; }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-bottom: 40px; }
-        
-        .stat-card {
-            background: white; padding: 25px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid white;
-            cursor: pointer; transition: 0.4s; position: relative; overflow: hidden;
-        }
-        .stat-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%;
-            background: var(--primary); transition: 0.3s;
-        }
-        .stat-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 40px rgba(255, 140, 66, 0.2); }
-        .stat-card:hover::before { width: 100%; opacity: 0.1; }
-        
-        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--primary); line-height: 1; }
-        .stat-label { color: #888; font-weight: 500; font-size: 0.9rem; }
 
-        .timeline-box { position: relative; padding-left: 30px; border-left: 3px solid #e0e0e0; }
-        .timeline-entry { position: relative; margin-bottom: 40px; }
-        .timeline-entry::before {
-            content: ''; position: absolute; left: -39px; top: 0;
-            width: 20px; height: 20px; border-radius: 50%;
-            background: var(--primary); border: 4px solid white;
-            box-shadow: 0 0 0 3px rgba(255,140,66,0.3);
-            transition: 0.3s;
+        /* BOTÓN DE IDIOMA */
+        .lang-toggle {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--secondary), var(--purple));
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.3);
+            transition: all 0.3s ease;
         }
-        .timeline-entry:hover::before { transform: scale(1.5); background: var(--secondary); }
-        
-        .entry-card {
-            background: white; padding: 20px; border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s;
-        }
-        .entry-card:hover { transform: translateX(10px); border-left: 5px solid var(--primary); }
 
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        
-        .fancy-card {
-            background: white; border-radius: 15px; overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.4s ease;
-            border: 1px solid rgba(0,0,0,0.05);
+        .lang-toggle:hover {
+            transform: scale(1.05);
         }
-        .fancy-card:hover { transform: translateY(-10px) rotate(1deg); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
-        
-        .card-img-wrap {
-            height: 180px; position: relative; overflow: hidden;
-            display: flex; align-items: center; justify-content: center; background: #f8f9fa;
+
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
         }
-        .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .card-img-wrap:hover img { transform: scale(1.1); filter: blur(2px); }
-        
-        .card-overlay-btn {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, 50%);
-            background: var(--primary); color: white; padding: 10px 20px; border-radius: 30px;
-            font-weight: 600; opacity: 0; transition: 0.4s; text-decoration: none;
-            display: flex; align-items: center; gap: 5px;
+
+        .profile-role {
+            font-size: 1rem;
+            color: var(--text-medium);
+            font-weight: 500;
         }
-        .card-img-wrap:hover .card-overlay-btn { transform: translate(-50%, -50%); opacity: 1; }
 
-        .card-body { padding: 20px; }
-        .card-title { font-weight: 700; margin-bottom: 5px; color: var(--secondary); }
-        .card-meta { font-size: 0.85rem; color: #888; display: flex; justify-content: space-between; }
-
-        .mobile-toggle { display: none; }
-        @media (max-width: 992px) {
-            .sidebar { transform: translateX(-100%); width: 280px; position: fixed; }
-            .sidebar.active { transform: translateX(0); }
-            .main-content { margin-left: 0; width: 100%; padding: 20px; }
-            .mobile-toggle { 
-                display: block; position: fixed; top: 15px; right: 15px; z-index: 2000;
-                background: var(--primary); color: white; border: none; padding: 12px; border-radius: 50%;
-                box-shadow: 0 5px 15px rgba(255,140,66,0.4);
-            }
+        .nav-menu {
+            flex-grow: 1;
+            padding: 20px 15px;
         }
-        
-        .modal-content { border: none; border-radius: 20px; overflow: hidden; }
-        .modal-header { background: var(--secondary); color: white; border: none; }
-        .btn-close-white { filter: invert(1); }
 
-        /* ===============================
-        CV PROFESIONAL – PRINT FINAL
-        ESTRUCTURADO Y FLUIDO
-        =============================== */
+        .nav-btn {
+            width: 100%;
+            padding: 14px 18px;
+            margin-bottom: 8px;
+            border: 2px solid transparent;
+            background: transparent;
+            color: var(--text-medium);
+            text-align: left;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            position: relative;
+        }
 
-        .print-certificates {
+        .nav-btn:hover {
+            background: linear-gradient(135deg, rgba(255,140,66,0.15), rgba(99,102,241,0.15));
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateX(10px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 8px 25px rgba(255,140,66,0.5);
+        }
+
+        .nav-btn i {
+            font-size: 1.1rem;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255,140,66,0.2);
+        }
+
+        .btn-download {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255,140,66,0.4);
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255,140,66,0.6);
+        }
+
+        .btn-contact {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            color: white;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16,185,129,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(16,185,129,0.6);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px 60px;
+            width: calc(100% - var(--sidebar-w));
+            overflow-y: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .main-content::-webkit-scrollbar { width: 8px; }
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .page-section {
             display: none;
         }
 
-        @media print {
-
-            @page {
-                size: A4;
-                margin: 1.5cm;
-            }
-
-            body {
-                font-family: 'Poppins', sans-serif;
-                background: white;
-                color: #222;
-                font-size: 10pt;
-                line-height: 1.5;
-            }
-
-            /* OCULTAR ELEMENTOS WEB */
-            .mobile-toggle,
-            .nav-menu,
-            .sidebar-footer,
-            .btn,
-            .card-overlay-btn,
-            .modal {
-                display: none !important;
-            }
-
-            /* LAYOUT GENERAL: 2 COLUMNAS */
-            body {
-                display: grid;
-                grid-template-columns: 30% 70%;
-                column-gap: 22px;
-            }
-
-            /* COLUMNA IZQUIERDA (DATOS PERSONALES) */
-            .sidebar {
-                position: static !important;
-                width: 100% !important;
-                background: #f4e7df !important;
-                color: #333 !important;
-                padding: 18px !important;
-                border-radius: 8px;
-            }
-
-            .profile-area {
-                background: none !important;
-                padding: 0 !important;
-                margin-bottom: 18px;
-                text-align: center;
-            }
-
-            .avatar-container {
-                width: 105px;
-                height: 105px;
-                margin: 0 auto 10px;
-                border: 4px solid #cfa68a;
-            }
-
-            .profile-name {
-                font-size: 15.5pt;
-                font-weight: 800;
-                margin-bottom: 4px;
-            }
-
-            .profile-role {
-                font-size: 9pt;
-                color: #555;
-            }
-
-            /* COLUMNA DERECHA (CONTENIDO) */
-            .main-content {
-                width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .page-section {
-                margin-bottom: 18px;
-            }
-
-            .d-print-none {
-                display: none !important;
-            }
-
-
-            /* TÍTULOS DE SECCIÓN */
-            .section-title {
-                font-size: 12pt;
-                font-weight: 800;
-                margin-bottom: 6px;
-                border-bottom: 2px solid #cfa68a;
-                padding-bottom: 4px;
-            }
-
-            /* BLOQUES LIMPIOS (SIN TARJETAS) */
-            .fancy-card,
-            .entry-card {
-                border: none !important;
-                box-shadow: none !important;
-                padding: 0 !important;
-                margin-bottom: 10px;
-            }
-
-            /* TEXTO */
-            h4, h5 {
-                font-size: 10.5pt;
-                font-weight: 700;
-                margin-bottom: 2px;
-            }
-
-            p,
-            .text-muted,
-            .small {
-                font-size: 9pt;
-                margin-bottom: 4px;
-            }
-
-            /* EVITAR CORTES HORRIBLES */
-            .entry-card,
-            .timeline-entry,
-            .fancy-card {
-                page-break-inside: avoid;
-            }
-
-            /* CERTIFICADOS COMO ANEXOS (OPCIONAL) */
-            .print-certificates {
-                display: block;
-                page-break-before: always;
-            }
-
-            .print-certificates img {
-                max-width: 100%;
-                page-break-inside: avoid;
-                margin-bottom: 20px;
-            }
-
-            /* DESACTIVAR EFECTOS */
-            * {
-                animation: none !important;
-                transition: none !important;
-                transform: none !important;
-                box-shadow: none !important;
-            }
+        .page-section.active {
+            display: block;
+            animation: pageSlide 0.6s ease;
         }
 
-        /* ===========================
-        CERTIFICADOS – ANEXOS PDF
-        =========================== */
-
-        @media print {
-
-            /* Página SOLO TÍTULO */
-            .cert-title {
-                page-break-before: always;
-                text-align: center;
-                font-size: 22pt;
-                font-weight: 800;
-                letter-spacing: 3px;
-                margin-top: 40%;
-            }
-
-            /* Cada certificado en hoja propia */
-            .cert-page {
-                page-break-before: always;
-                break-before: page;
-            }
-
-            /* Forzar hoja horizontal SOLO para certificados */
-            @page cert-landscape {
-                size: A4 landscape;
-                margin: 1.5cm;
-            }
-
-            .cert-page {
-                page: cert-landscape;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .cert-page img {
-                max-width: 95%;
-                max-height: 90%;
-                object-fit: contain;
-            }
-
-        }
-
-        /* ===============================
-        ANIMACIONES SEGURAS – CV
-        NO ROMPEN PDF / AZURE
-        =============================== */
-
-        /* Animación general de entrada */
-        .fade-in {
-            animation: fadeInUp 0.8s ease forwards;
-        }
-
-        @keyframes fadeInUp {
+        @keyframes pageSlide {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -393,344 +313,1459 @@
             }
         }
 
-        /* Animación leve para estadísticas */
-        .stat-card {
-            animation: popIn 0.6s ease;
+        .section-header {
+            margin-bottom: 40px;
         }
 
-        @keyframes popIn {
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), transparent);
+            border-radius: 2px;
+        }
+
+        /* STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            animation: cardPop 0.6s ease backwards;
+        }
+
+        .stat-card:nth-child(1) {
+            border-left: 5px solid var(--primary);
+            animation-delay: 0.1s;
+        }
+        .stat-card:nth-child(2) {
+            border-left: 5px solid var(--accent);
+            animation-delay: 0.2s;
+        }
+        .stat-card:nth-child(3) {
+            border-left: 5px solid var(--secondary);
+            animation-delay: 0.3s;
+        }
+        .stat-card:nth-child(4) {
+            border-left: 5px solid var(--purple);
+            animation-delay: 0.4s;
+        }
+
+        @keyframes cardPop {
             from {
                 opacity: 0;
-                transform: scale(0.95);
+                transform: scale(0.8) translateY(50px);
             }
             to {
                 opacity: 1;
-                transform: scale(1);
+                transform: scale(1) translateY(0);
             }
         }
 
-        /* Hover refinado en tarjetas */
+        .stat-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(255,140,66,0.4);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .stat-card:nth-child(1) .stat-icon { color: var(--primary); }
+        .stat-card:nth-child(2) .stat-icon { color: var(--accent); }
+        .stat-card:nth-child(3) .stat-icon { color: var(--secondary); }
+        .stat-card:nth-child(4) .stat-icon { color: var(--purple); }
+
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .stat-label {
+            color: var(--text-medium);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ABOUT CARD CON FOTO AL LADO */
+        .about-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(255,140,66,0.3);
+            margin-bottom: 50px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .about-flex {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 35px;
+            align-items: flex-start;
+        }
+
+        .about-img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255,140,66,0.3);
+            border: 3px solid var(--primary);
+        }
+
+        .about-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+
+        .about-text {
+            line-height: 1.9;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        /* SKILLS SECTION */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .skill-category {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(255,140,66,0.2);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .skill-category-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-item {
+            margin-bottom: 20px;
+        }
+
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .skill-bar {
+            height: 10px;
+            background: rgba(255,140,66,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            animation: skillLoad 1.5s ease-out;
+            box-shadow: 0 0 10px rgba(255,140,66,0.5);
+        }
+
+        @keyframes skillLoad {
+            from { width: 0; }
+        }
+
+        /* INFO CARDS */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(99,102,241,0.3);
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(99,102,241,0.4);
+        }
+
+        .info-card-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255,140,66,0.2);
+        }
+
+        .info-item {
+            margin-bottom: 18px;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        /* TIMELINE */
+        .timeline-box {
+            position: relative;
+            padding-left: 45px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .timeline-entry {
+            position: relative;
+            margin-bottom: 40px;
+            animation: slideIn 0.6s ease backwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .timeline-entry::before {
+            content: '';
+            position: absolute;
+            left: -54px;
+            top: 8px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 4px solid white;
+            box-shadow: 0 0 0 4px rgba(255,140,66,0.3);
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { box-shadow: 0 0 0 4px rgba(255,140,66,0.3); }
+            50% { box-shadow: 0 0 0 8px rgba(255,140,66,0.5); }
+        }
+
+        .timeline-entry:hover::before {
+            background: var(--secondary);
+            transform: scale(1.3);
+        }
+
+        .entry-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid rgba(255,140,66,0.2);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .entry-card:hover {
+            transform: translateX(15px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(255,140,66,0.3);
+        }
+
+        .entry-date {
+            display: inline-block;
+            padding: 8px 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .entry-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .entry-subtitle {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .entry-description {
+            color: var(--text-medium);
+            line-height: 1.7;
+        }
+
+        /* GRID CARDS */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
         .fancy-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(255,140,66,0.2);
+            transition: all 0.5s ease;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            position: relative;
         }
 
         .fancy-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            transform: translateY(-15px);
+            box-shadow: 0 20px 60px rgba(255,140,66,0.4);
+            border-color: var(--primary);
         }
 
-        /* Sidebar más fluida */
-        .nav-btn {
-            transition: background 0.3s ease, transform 0.2s ease;
+        .card-img-wrap {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8fafc, #e0f2fe);
         }
 
-        .nav-btn:hover {
-            transform: translateX(6px);
+        .card-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
         }
 
-        /* Timeline entrada suave */
-        .timeline-entry {
-            animation: fadeInUp 0.6s ease forwards;
+        .fancy-card:hover .card-img-wrap img {
+            transform: scale(1.15);
         }
 
-        /* Apagar animaciones en PDF (seguridad total) */
+        .card-overlay-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 60%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 700;
+            opacity: 0;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(255,140,66,0.5);
+            cursor: pointer;
+        }
+
+        .card-img-wrap:hover .card-overlay-btn {
+            transform: translate(-50%, -50%);
+            opacity: 1;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .card-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: linear-gradient(135deg, var(--secondary), var(--purple));
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+        }
+
+        .card-meta {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+        }
+
+        /* BOTÓN WHATSAPP EN GARAGE */
+        .whatsapp-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            background: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(37,211,102,0.5);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 25px rgba(37,211,102,0.7);
+        }
+
+        /* SEARCH BAR */
+        .search-bar {
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255,140,66,0.2);
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            color: var(--text-dark);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(255,140,66,0.3);
+        }
+
+        /* MOBILE */
+        .mobile-toggle {
+            display: none;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                transition: transform 0.3s ease;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main-content {
+                width: 100%;
+                padding: 25px 20px;
+            }
+            .about-flex {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .mobile-toggle {
+                display: block;
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 2000;
+                background: linear-gradient(135deg, var(--primary), var(--secondary));
+                color: white;
+                border: none;
+                padding: 15px;
+                border-radius: 50%;
+                box-shadow: 0 4px 20px rgba(255,140,66,0.5);
+                cursor: pointer;
+            }
+        }
+
+        /* MODAL */
+        .modal-content {
+            border: none;
+            border-radius: 20px;
+            background: var(--bg-card);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 20px 20px 0 0;
+        }
+
+        /* CONTACT FORM */
+        .contact-form {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 2px solid rgba(255,140,66,0.2);
+            background: var(--bg-card);
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(255,140,66,0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* PRINT */
         @media print {
+            @page {
+                size: A4;
+                margin: 1.2cm;
+            }
+
+            body {
+                background: white !important;
+                color: #222;
+                font-size: 9pt;
+                line-height: 1.4;
+                display: flex !important;
+                flex-direction: row !important;
+            }
+
+            .particles-bg, .mobile-toggle, .nav-menu,
+            .card-overlay-btn, .whatsapp-btn, .modal,
+            .theme-toggle, .lang-toggle, .search-bar { 
+                display: none !important; 
+            }
+
+            .sidebar {
+                position: static !important;
+                width: 30% !important;
+                min-width: 30% !important;
+                max-width: 30% !important;
+                background: #f4e7df !important;
+                color: #333 !important;
+                padding: 20px 15px !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                border-right: 3px solid #cfa68a !important;
+                overflow: visible !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            .profile-area {
+                background: none !important;
+                padding: 0 0 15px 0 !important;
+                margin-bottom: 20px !important;
+                text-align: center;
+                border-bottom: 2px solid #cfa68a !important;
+            }
+
+            .profile-avatar-print {
+                display: block !important;
+            }
+
+            .profile-avatar-print img {
+                width: 110px !important;
+                height: 110px !important;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 4px solid #FF8C42 !important;
+                display: block !important;
+                margin: 0 auto 12px !important;
+                box-shadow: 0 4px 15px rgba(255,140,66,0.3);
+            }
+
+            .profile-name {
+                font-size: 13pt !important;
+                font-weight: 800;
+                margin-bottom: 6px;
+                color: #333 !important;
+                background: none !important;
+                -webkit-text-fill-color: #333 !important;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .profile-role {
+                font-size: 8.5pt !important;
+                color: #555 !important;
+                line-height: 1.3;
+                padding: 0 5px;
+            }
+
+            .sidebar-footer {
+                display: none !important;
+            }
+
+            .main-content {
+                width: 70% !important;
+                margin: 0 !important;
+                padding: 0 0 0 20px !important;
+                background: white !important;
+                overflow: visible !important;
+            }
+
+            .page-section {
+                display: block !important;
+                margin-bottom: 18px;
+                page-break-inside: avoid;
+            }
+
+            .d-print-none {
+                display: none !important;
+            }
+
+            .section-title {
+                font-size: 12pt;
+                font-weight: 800;
+                margin-bottom: 8px;
+                border-bottom: 2px solid #FF8C42;
+                padding-bottom: 3px;
+                color: #FF8C42 !important;
+                background: none !important;
+                -webkit-text-fill-color: #FF8C42 !important;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .section-title::after {
+                display: none !important;
+            }
+
+            .stat-card, .about-card, .info-card, .entry-card, .fancy-card, .skill-category {
+                background: white !important;
+                border: 1px solid #e0e0e0 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+                margin-bottom: 10px;
+                backdrop-filter: none !important;
+                padding: 12px !important;
+            }
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 15px;
+                page-break-inside: avoid;
+            }
+
+            .stat-card {
+                text-align: center;
+                padding: 15px 10px !important;
+                border-left: 4px solid #FF8C42 !important;
+            }
+
+            .stat-icon {
+                font-size: 18pt;
+                margin-bottom: 5px;
+                display: block;
+            }
+
+            .stat-number {
+                color: #FF8C42 !important;
+                font-size: 24pt;
+                font-weight: 900;
+                line-height: 1;
+                margin: 5px 0;
+            }
+
+            .stat-label {
+                color: #555 !important;
+                font-size: 8pt;
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+
+            .about-flex {
+                display: block !important;
+            }
+
+            .about-flex > div:first-child {
+                display: none !important;
+            }
+
+            .about-title {
+                font-size: 11pt;
+                margin-top: 0 !important;
+                margin-bottom: 8px !important;
+                color: #FF8C42 !important;
+                background: none !important;
+                -webkit-text-fill-color: #FF8C42 !important;
+            }
+
+            .about-text {
+                font-size: 9pt;
+                color: #333 !important;
+                line-height: 1.5;
+                text-align: justify;
+            }
+
+            .info-grid, .skills-grid {
+                display: block;
+                page-break-inside: avoid;
+            }
+
+            .info-card, .skill-category {
+                margin-bottom: 12px;
+                padding: 12px !important;
+            }
+
+            .info-card-title, .skill-category-title {
+                font-size: 10pt;
+                color: #FF8C42 !important;
+                background: none !important;
+                -webkit-text-fill-color: #FF8C42 !important;
+                margin-bottom: 10px;
+                padding-bottom: 5px;
+                border-bottom: 1px solid #e0e0e0;
+                font-weight: 700;
+            }
+
+            .info-label {
+                font-size: 7pt;
+                color: #888 !important;
+                text-transform: uppercase;
+                margin-bottom: 2px;
+            }
+
+            .info-value {
+                font-size: 9pt;
+                color: #333 !important;
+                margin-bottom: 8px;
+            }
+
+            .skill-name {
+                font-size: 8pt;
+                color: #333 !important;
+            }
+
+            .skill-bar {
+                height: 6px;
+            }
+
+            .timeline-box {
+                border-left: 2px solid #FF8C42;
+                padding-left: 15px;
+            }
+
+            .timeline-entry {
+                page-break-inside: avoid;
+                margin-bottom: 12px;
+            }
+
+            .timeline-entry::before {
+                background: #FF8C42 !important;
+                border: 3px solid white;
+                box-shadow: 0 0 0 1px #FF8C42 !important;
+                width: 12px;
+                height: 12px;
+                left: -22px;
+            }
+
+            .entry-date {
+                background: #FF8C42 !important;
+                color: white !important;
+                padding: 3px 10px;
+                font-size: 7.5pt;
+                display: inline-block;
+                border-radius: 12px;
+            }
+
+            .entry-title {
+                font-size: 10pt;
+                color: #333 !important;
+                font-weight: 700;
+                margin: 5px 0 3px 0;
+            }
+
+            .entry-subtitle {
+                font-size: 9pt;
+                color: #FF8C42 !important;
+                margin-bottom: 5px;
+                font-weight: 600;
+            }
+
+            .entry-description {
+                font-size: 8.5pt;
+                color: #555 !important;
+                line-height: 1.4;
+            }
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .fancy-card {
+                padding: 10px !important;
+            }
+
+            .card-img-wrap {
+                height: 80px !important;
+                page-break-inside: avoid;
+                margin-bottom: 8px;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            .card-badge {
+                background: #6366f1 !important;
+                font-size: 6.5pt;
+                padding: 3px 8px;
+                display: inline-block;
+                margin-bottom: 5px;
+            }
+
+            .card-title {
+                font-size: 9pt;
+                color: #333 !important;
+                font-weight: 700;
+                margin-bottom: 3px;
+            }
+
+            .card-meta {
+                font-size: 7.5pt;
+                color: #666 !important;
+            }
+
             * {
                 animation: none !important;
                 transition: none !important;
                 transform: none !important;
             }
-        }
 
+            .print-certificates {
+                display: block;
+                page-break-before: always;
+            }
+
+            .print-certificates h2 {
+                text-align: center;
+                font-size: 18pt;
+                color: #FF8C42;
+                margin-top: 100px;
+                margin-bottom: 50px;
+            }
+
+            .print-certificates > div {
+                page-break-before: always;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 80vh;
+            }
+
+            .print-certificates img {
+                max-width: 100%;
+                max-height: 90vh;
+                object-fit: contain;
+            }
+        }
     </style>
 </head>
-
 <body>
 
-    <button class="mobile-toggle" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
+    <!-- ICONOS TECNOLÓGICOS FLOTANTES -->
+    <div class="particles-bg" id="particlesBg"></div>
 
+    <!-- BOTÓN MÓVIL -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="bi bi-list" style="font-size: 1.5rem;"></i>
+    </button>
+
+    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
         <div class="profile-area">
-            <div class="avatar-container">
+            <!-- Botón Modo Oscuro -->
+            <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
+                <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+            </button>
+
+            <!-- Botón Idioma -->
+            <button class="lang-toggle" onclick="toggleLang()" id="langBtn">
+                <span id="langText">EN</span>
+            </button>
+
+            <div class="profile-avatar-print" style="display: none;">
                 {% if perfil.foto %}
-                <img src="{{ perfil.foto.url }}" class="avatar-img" alt="Foto">
+                    <img src="{{ perfil.foto.url }}" alt="{{ perfil.nombre }}">
                 {% endif %}
             </div>
-            <h3 class="profile-name">{{ perfil.nombre }}</h3>
-            <p class="profile-role">{{ perfil.profesion }}</p>
+            <div class="profile-name" data-es="{{ perfil.nombre }}" data-en="{{ perfil.nombre }}">{{ perfil.nombre }}</div>
+            <div class="profile-role" data-es="{{ perfil.profesion }}" data-en="Information Technology Student">{{ perfil.profesion }}</div>
         </div>
 
-        <div class="nav-menu">
-            <button class="nav-btn active" onclick="switchTab('dashboard', this)"><i class="bi bi-grid-fill"></i> Inicio</button>
-            <button class="nav-btn" onclick="switchTab('perfil', this)"><i class="bi bi-person-lines-fill"></i> Datos Personales</button>
-            <button class="nav-btn" onclick="switchTab('formacion', this)"><i class="bi bi-mortarboard"></i> Educación</button>
-            <button class="nav-btn" onclick="switchTab('experiencia', this)"><i class="bi bi-briefcase"></i> Experiencia</button>
-            <button class="nav-btn" onclick="switchTab('cursos', this)"><i class="bi bi-book-half"></i> Cursos</button>
-            <button class="nav-btn" onclick="switchTab('reconocimientos', this)"><i class="bi bi-trophy"></i> Reconocimientos</button>
-            <button class="nav-btn" onclick="switchTab('proyectos', this)"><i class="bi bi-code-slash"></i> Proyectos</button>
-            <button class="nav-btn" onclick="switchTab('garage', this)"><i class="bi bi-shop"></i> Garage</button>
-        </div>
+        <nav class="nav-menu">
+            <button class="nav-btn active" onclick="switchTab('dashboard', this)">
+                <i class="bi bi-house-door-fill"></i> 
+                <span data-es="Inicio" data-en="Home">Inicio</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('perfil', this)">
+                <i class="bi bi-person-fill"></i> 
+                <span data-es="Datos Personales" data-en="Personal Info">Datos Personales</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('skills', this)">
+                <i class="bi bi-star-fill"></i> 
+                <span data-es="Habilidades" data-en="Skills">Habilidades</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('formacion', this)">
+                <i class="bi bi-mortarboard-fill"></i> 
+                <span data-es="Educación" data-en="Education">Educación</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('experiencia', this)">
+                <i class="bi bi-briefcase-fill"></i> 
+                <span data-es="Experiencia" data-en="Experience">Experiencia</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('cursos', this)">
+                <i class="bi bi-award-fill"></i> 
+                <span data-es="Cursos" data-en="Courses">Cursos</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('reconocimientos', this)">
+                <i class="bi bi-trophy-fill"></i> 
+                <span data-es="Reconocimientos" data-en="Awards">Reconocimientos</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('proyectos', this)">
+                <i class="bi bi-code-slash"></i> 
+                <span data-es="Proyectos" data-en="Projects">Proyectos</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('garage', this)">
+                <i class="bi bi-shop"></i> 
+                <span data-es="Garage" data-en="Garage">Garage</span>
+            </button>
+        </nav>
 
         <div class="sidebar-footer">
             <button class="btn-download" data-bs-toggle="modal" data-bs-target="#pdfOptionsModal">
-                <i class="bi bi-cloud-arrow-down-fill"></i> Descargar CV
+                <i class="bi bi-download"></i> <span data-es="Descargar CV" data-en="Download CV">Descargar CV</span>
+            </button>
+            <button class="btn-contact" data-bs-toggle="modal" data-bs-target="#contactModal">
+                <i class="bi bi-envelope-fill"></i> <span data-es="Contactar" data-en="Contact Me">Contactar</span>
             </button>
         </div>
     </aside>
 
+    <!-- MAIN CONTENT -->
     <main class="main-content">
-
-        <section id="dashboard" class="page-section active fade-in">
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page-section active">
             <div class="section-header">
-                <h1 class="section-title">Bienvenido 👋</h1>
-                <p class="text-muted">Resumen de mi actividad profesional</p>
+                <h1 class="section-title" data-es="Bienvenido 👋" data-en="Welcome 👋">Bienvenido 👋</h1>
             </div>
 
             <div class="stats-grid">
-                <div class="stat-card" onclick="switchTab('cursos', getBtn(4))">
-                    <div class="stat-icon"><i class="bi bi-award-fill"></i></div>
-                    <div class="stat-info">
-                        <h3 class="stat-number">{{ certificados.count }}</h3>
-                        <p class="stat-label">Cursos</p>
-                    </div>
+                <div class="stat-card" onclick="switchTab('cursos', document.querySelectorAll('.nav-btn')[5])" style="cursor: pointer;">
+                    <i class="bi bi-award-fill stat-icon"></i>
+                    <div class="stat-number">{{ perfil.certificados.count }}</div>
+                    <div class="stat-label" data-es="Cursos" data-en="Courses">Cursos</div>
                 </div>
-                <div class="stat-card" onclick="switchTab('reconocimientos', getBtn(5))">
-                    <div class="stat-icon"><i class="bi bi-star-fill"></i></div>
-                    <div class="stat-info">
-                        <h3 class="stat-number">{{ perfil.reconocimientos.count }}</h3>
-                        <p class="stat-label">Reconocimientos</p>
-                    </div>
+                <div class="stat-card" onclick="switchTab('reconocimientos', document.querySelectorAll('.nav-btn')[6])" style="cursor: pointer;">
+                    <i class="bi bi-trophy-fill stat-icon"></i>
+                    <div class="stat-number">{{ perfil.reconocimientos.count }}</div>
+                    <div class="stat-label" data-es="Reconocimientos" data-en="Awards">Reconocimientos</div>
                 </div>
-                <div class="stat-card" onclick="switchTab('proyectos', getBtn(6))">
-                    <div class="stat-icon"><i class="bi bi-laptop-fill"></i></div>
-                    <div class="stat-info">
-                        <h3 class="stat-number">{{ proyectos.count }}</h3>
-                        <p class="stat-label">Proyectos</p>
-                    </div>
+                <div class="stat-card" onclick="switchTab('proyectos', document.querySelectorAll('.nav-btn')[7])" style="cursor: pointer;">
+                    <i class="bi bi-code-square stat-icon"></i>
+                    <div class="stat-number">{{ perfil.proyectos.count }}</div>
+                    <div class="stat-label" data-es="Proyectos" data-en="Projects">Proyectos</div>
                 </div>
-                <div class="stat-card" onclick="switchTab('garage', getBtn(7))">
-                    <div class="stat-icon"><i class="bi bi-cart-check-fill"></i></div>
-                    <div class="stat-info">
-                        <h3 class="stat-number">{{ garage.count }}</h3>
-                        <p class="stat-label">En Venta</p>
-                    </div>
+                <div class="stat-card" onclick="switchTab('garage', document.querySelectorAll('.nav-btn')[8])" style="cursor: pointer;">
+                    <i class="bi bi-cart-fill stat-icon"></i>
+                    <div class="stat-number">{{ garage|length }}</div>
+                    <div class="stat-label" data-es="En Venta" data-en="For Sale">En Venta</div>
                 </div>
             </div>
 
-            <div class="fancy-card p-4">
-                <h4 class="mb-3 text-primary"><i class="bi bi-quote"></i> Sobre Mí</h4>
-                <p style="line-height: 1.8; color: #555;">{{ perfil.descripcion }}</p>
+            <!-- FOTO AL LADO IZQUIERDO -->
+            <div class="about-card">
+                <div class="about-flex">
+                    <div>
+                        {% if perfil.foto %}
+                        <img src="{{ perfil.foto.url }}" alt="{{ perfil.nombre }}" class="about-img">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h2 class="about-title" data-es="💬 Sobre Mí" data-en="💬 About Me">💬 Sobre Mí</h2>
+                        <p class="about-text">{{ perfil.descripcion }}</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="perfil" class="page-section fade-in">
-            <div class="section-header"><h2 class="section-title">Datos Personales</h2></div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="fancy-card p-4 h-100">
-                        <h5 class="mb-4 text-primary">Identificación</h5>
-                        <p><strong>Nombre:</strong> {{ perfil.nombre }}</p>
-                        <p><strong>Cédula:</strong> {{ perfil.cedula }}</p>
-                        <p><strong>Nacionalidad:</strong> {{ perfil.nacionalidad }}</p>
-                        <p><strong>Fecha Nac:</strong> {{ perfil.fecha_nacimiento }}</p>
+        <!-- DATOS PERSONALES -->
+        <section id="perfil" class="page-section">
+            <div class="section-header">
+                <h1 class="section-title" data-es="Datos Personales" data-en="Personal Information">Datos Personales</h1>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3 class="info-card-title" data-es="Identificación" data-en="Identification">Identificación</h3>
+                    <div class="info-item">
+                        <div class="info-label" data-es="Nombre:" data-en="Name:">Nombre:</div>
+                        <div class="info-value">{{ perfil.nombre }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label" data-es="Cédula:" data-en="ID:">Cédula:</div>
+                        <div class="info-value">{{ perfil.cedula }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label" data-es="Nacionalidad:" data-en="Nationality:">Nacionalidad:</div>
+                        <div class="info-value">{{ perfil.nacionalidad }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label" data-es="Fecha Nac:" data-en="Birth Date:">Fecha Nac:</div>
+                        <div class="info-value">{{ perfil.fecha_nacimiento|date:"d/m/Y" }}</div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="fancy-card p-4 h-100">
-                        <h5 class="mb-4 text-primary">Contacto</h5>
-                        <p><i class="bi bi-envelope me-2"></i> {{ perfil.email }}</p>
-                        <p><i class="bi bi-phone me-2"></i> {{ perfil.telefono }}</p>
-                        <p><i class="bi bi-geo-alt me-2"></i> {{ perfil.ubicacion }}</p>
-                        <div class="mt-3">
-                            <a href="{{ perfil.linkedin }}" class="btn btn-outline-primary btn-sm rounded-pill"><i class="bi bi-linkedin"></i> LinkedIn</a>
-                            <a href="{{ perfil.github }}" class="btn btn-outline-dark btn-sm rounded-pill"><i class="bi bi-github"></i> GitHub</a>
+
+                <div class="info-card">
+                    <h3 class="info-card-title" data-es="Contacto" data-en="Contact">Contacto</h3>
+                    <div class="info-item">
+                        <div class="info-label">Email:</div>
+                        <div class="info-value">{{ perfil.email }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label" data-es="Teléfono:" data-en="Phone:">Teléfono:</div>
+                        <div class="info-value">{{ perfil.telefono }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label" data-es="Ubicación:" data-en="Location:">Ubicación:</div>
+                        <div class="info-value">{{ perfil.ubicacion }}</div>
+                    </div>
+                    {% if perfil.linkedin or perfil.github %}
+                    <div class="info-item">
+                        <div class="info-label" data-es="Redes:" data-en="Social:">Redes:</div>
+                        <div>
+                            {% if perfil.linkedin %}
+                            <a href="{{ perfil.linkedin }}" target="_blank" class="btn btn-sm btn-outline-primary me-2">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+                            {% endif %}
+                            {% if perfil.github %}
+                            <a href="{{ perfil.github }}" target="_blank" class="btn btn-sm btn-outline-dark">
+                                <i class="bi bi-github"></i>
+                            </a>
+                            {% endif %}
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </section>
 
-        <section id="formacion" class="page-section fade-in">
-            <div class="section-header"><h2 class="section-title">Educación</h2></div>
+        <!-- HABILIDADES -->
+        <section id="skills" class="page-section">
+            <div class="section-header">
+                <h1 class="section-title" data-es="Habilidades Técnicas" data-en="Technical Skills">Habilidades Técnicas</h1>
+            </div>
+
+            <div class="skills-grid">
+                {% if habilidades %}
+                    {% for habilidad in habilidades %}
+                    <div class="skill-category">
+                        <div class="skill-category-title">
+                            <i class="bi bi-code-slash"></i>
+                            {{ habilidad.categoria }}
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>{{ habilidad.nombre }}</span>
+                                <span>{{ habilidad.nivel }}%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="{{ habilidad.nivel }}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="info-card">
+                        <p>Agrega tus habilidades desde el panel de administración.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- EDUCACIÓN -->
+        <section id="formacion" class="page-section">
+            <div class="section-header">
+                <h1 class="section-title" data-es="Educación" data-en="Education">Educación</h1>
+            </div>
+
             <div class="timeline-box">
                 {% for edu in educacion %}
                 <div class="timeline-entry">
                     <div class="entry-card">
-                        <span class="badge bg-warning text-dark mb-2">{{ edu.fecha_inicio|date:"Y" }} - {% if edu.fecha_fin %}{{ edu.fecha_fin|date:"Y" }}{% else %}Actualidad{% endif %}</span>
-                        <h4 class="mb-1">{{ edu.titulo }}</h4>
-                        <p class="text-primary fw-bold">{{ edu.institucion }}</p>
-                        <p class="text-muted small">{{ edu.descripcion }}</p>
+                        <span class="entry-date">
+                            {{ edu.fecha_inicio|date:"Y" }} - {% if edu.fecha_fin %}{{ edu.fecha_fin|date:"Y" }}{% else %}<span data-es="Actualidad" data-en="Present">Actualidad</span>{% endif %}
+                        </span>
+                        <h3 class="entry-title">{{ edu.titulo }}</h3>
+                        <p class="entry-subtitle">{{ edu.institucion }}</p>
+                        {% if edu.descripcion %}
+                        <p class="entry-description">{{ edu.descripcion }}</p>
+                        {% endif %}
                     </div>
                 </div>
+                {% empty %}
+                <p data-es="No hay educación registrada." data-en="No education registered.">No hay educación registrada.</p>
                 {% endfor %}
             </div>
         </section>
 
-        <section id="experiencia" class="page-section fade-in">
-            <div class="section-header"><h2 class="section-title">Experiencia Laboral</h2></div>
+        <!-- EXPERIENCIA -->
+        <section id="experiencia" class="page-section">
+            <div class="section-header">
+                <h1 class="section-title" data-es="Experiencia Laboral" data-en="Work Experience">Experiencia Laboral</h1>
+            </div>
+
             <div class="timeline-box">
                 {% for exp in experiencia %}
                 <div class="timeline-entry">
-                    <div class="entry-card border-start border-primary border-4">
-                        <span class="badge bg-secondary mb-2">{{ exp.fecha_inicio|date:"M Y" }} - {% if exp.fecha_fin %}{{ exp.fecha_fin|date:"M Y" }}{% else %}Actualidad{% endif %}</span>
-                        <h4>{{ exp.cargo }}</h4>
-                        <p class="text-primary fw-bold">{{ exp.empresa }}</p>
-                        <p class="text-muted">{{ exp.descripcion }}</p>
+                    <div class="entry-card">
+                        <span class="entry-date">
+                            {{ exp.fecha_inicio|date:"M Y" }} - {% if exp.fecha_fin %}{{ exp.fecha_fin|date:"M Y" }}{% else %}<span data-es="Actual" data-en="Current">Actual</span>{% endif %}
+                        </span>
+                        <h3 class="entry-title">{{ exp.cargo }}</h3>
+                        <p class="entry-subtitle">{{ exp.empresa }}</p>
+                        <p class="entry-description">{{ exp.descripcion }}</p>
                     </div>
                 </div>
                 {% empty %}
-                <div class="alert alert-light">No hay experiencia registrada.</div>
+                <p data-es="No hay experiencia laboral registrada." data-en="No work experience registered.">No hay experiencia laboral registrada.</p>
                 {% endfor %}
             </div>
         </section>
 
-        <section id="cursos" class="page-section fade-in">
-            <div class="section-header"><h2 class="section-title">Cursos Realizados</h2></div>
-            <div class="grid-container">
+        <!-- CURSOS CON BÚSQUEDA -->
+        <section id="cursos" class="page-section">
+            <div class="section-header">
+                <h1 class="section-title" data-es="Cursos Realizados" data-en="Completed Courses">Cursos Realizados</h1>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" id="cursosSearch" placeholder="Buscar curso..." 
+                       data-es-placeholder="Buscar curso..." 
+                       data-en-placeholder="Search course..."
+                       onkeyup="filterCards('cursos')">
+            </div>
+
+            <div class="grid-container print-certificates" id="cursosGrid">
                 {% for cert in certificados %}
-                <div class="fancy-card">
+                <div class="fancy-card" data-search="{{ cert.titulo|lower }} {{ cert.institucion|lower }}">
                     <div class="card-img-wrap">
+                        {% if cert.imagen %}
+                            <img src="{{ cert.imagen.url }}" alt="{{ cert.titulo }}">
+                        {% elif cert.archivo %}
+                            <i class="bi bi-file-earmark-pdf" style="font-size: 4rem; color: var(--primary); display: flex; align-items: center; justify-content: center; height: 100%;"></i>
+                        {% else %}
+                            <i class="bi bi-award" style="font-size: 4rem; color: var(--secondary); display: flex; align-items: center; justify-content: center; height: 100%;"></i>
+                        {% endif %}
+                        
                         {% if cert.archivo %}
-                            {% if cert.archivo.url|slice:"-4:" == ".pdf" %}
-                                <i class="bi bi-file-earmark-pdf text-danger display-1"></i>
-                            {% else %}
-                                <img src="{{ cert.archivo.url }}" alt="Certificado">
-                            {% endif %}
-                            <a href="#" class="card-overlay-btn" onclick="openModal('{{ cert.archivo.url }}')"><i class="bi bi-eye"></i> Ver</a>
+                        <a href="javascript:void(0)" onclick="openModal('{{ cert.archivo.url }}')" class="card-overlay-btn">
+                            <i class="bi bi-eye"></i> <span data-es="Ver Certificado" data-en="View Certificate">Ver Certificado</span>
+                        </a>
                         {% endif %}
                     </div>
                     <div class="card-body">
-                        <div class="card-title">{{ cert.titulo }}</div>
-                        <div class="card-meta">
-                            <span>{{ cert.institucion }}</span>
-                            <span class="badge bg-light text-dark">{{ cert.fecha|date:"Y" }}</span>
-                        </div>
+                        <span class="card-badge">{{ cert.fecha|date:"Y" }}</span>
+                        <h3 class="card-title">{{ cert.titulo }}</h3>
+                        <div class="card-meta">{{ cert.institucion }}</div>
                     </div>
                 </div>
+                {% empty %}
+                <p data-es="No hay certificados registrados." data-en="No certificates registered.">No hay certificados registrados.</p>
                 {% endfor %}
             </div>
         </section>
 
-        <section id="reconocimientos" class="page-section fade-in">
-            <div class="section-header"><h2 class="section-title">Reconocimientos</h2></div>
+        <!-- RECONOCIMIENTOS -->
+        <section id="reconocimientos" class="page-section">
+            <div class="section-header">
+                <h1 class="section-title" data-es="Reconocimientos" data-en="Awards">Reconocimientos</h1>
+            </div>
+
             <div class="grid-container">
-                {% for reco in perfil.reconocimientos.all %}
-                <div class="fancy-card border-warning">
-                    <div class="card-img-wrap bg-warning bg-opacity-10">
-                        <i class="bi bi-trophy-fill text-warning display-1"></i>
-                        {% if reco.archivo %}
-                        <a href="#" class="card-overlay-btn bg-warning text-dark" onclick="openModal('{{ reco.archivo.url }}')"><i class="bi bi-eye"></i> Evidencia</a>
+                {% for rec in perfil.reconocimientos.all %}
+                <div class="fancy-card" style="background: linear-gradient(135deg, rgba(254,243,199,0.95) 0%, rgba(255,247,237,0.95) 100%);">
+                    <div class="card-img-wrap" style="height: 200px; background: linear-gradient(135deg, #fef3c7, #fde68a);">
+                        <div style="font-size: 4rem; display: flex; align-items: center; justify-content: center; height: 100%;">🏆</div>
+                        {% if rec.archivo %}
+                        <a href="javascript:void(0)" onclick="openModal('{{ rec.archivo.url }}')" class="card-overlay-btn">
+                            <i class="bi bi-eye"></i> <span data-es="Ver" data-en="View">Ver</span>
+                        </a>
                         {% endif %}
                     </div>
                     <div class="card-body text-center">
-                        <h5 class="fw-bold">{{ reco.titulo }}</h5>
-                        <p class="small text-muted">{{ reco.otorgado_por }}</p>
-                        <span class="badge bg-warning text-dark">{{ reco.fecha|date:"d M Y" }}</span>
+                        <h3 class="card-title">{{ rec.titulo }}</h3>
+                        <p class="card-meta" style="color: #92400e;">{{ rec.otorgado_por }}</p>
+                        <span class="card-badge" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">{{ rec.fecha|date:"d M Y" }}</span>
                     </div>
                 </div>
                 {% empty %}
-                <div class="alert alert-warning">No hay reconocimientos registrados.</div>
+                <p data-es="No hay reconocimientos registrados." data-en="No awards registered.">No hay reconocimientos registrados.</p>
                 {% endfor %}
             </div>
         </section>
 
-        <section id="proyectos" class="page-section fade-in">
-            <div class="section-header"><h2 class="section-title">Proyectos</h2></div>
-            <div class="grid-container">
-                {% for proy in proyectos %}
-                <div class="fancy-card">
+        <!-- PROYECTOS CON BÚSQUEDA -->
+        <section id="proyectos" class="page-section">
+            <div class="section-header">
+                <h1 class="section-title" data-es="Proyectos" data-en="Projects">Proyectos</h1>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" id="proyectosSearch" placeholder="Buscar proyecto..." 
+                       data-es-placeholder="Buscar proyecto..." 
+                       data-en-placeholder="Search project..."
+                       onkeyup="filterCards('proyectos')">
+            </div>
+
+            <div class="grid-container" id="proyectosGrid">
+                {% for proyecto in proyectos %}
+                <div class="fancy-card" data-search="{{ proyecto.nombre|lower }} {{ proyecto.tecnologias|lower }}">
                     <div class="card-body">
-                        <h4 class="text-primary fw-bold">{{ proy.nombre }}</h4>
-                        <p class="text-muted small">{{ proy.descripcion }}</p>
-                        <div class="project-tech mb-3" data-tech="{{ proy.tecnologias }}"></div>
+                        <span class="card-badge" data-es="Proyecto" data-en="Project">Proyecto</span>
+                        <h3 class="card-title">{{ proyecto.nombre }}</h3>
+                        <p class="entry-description mb-3">{{ proyecto.descripcion }}</p>
+                        
+                        <div class="project-tech mb-3" data-tech="{{ proyecto.tecnologias }}"></div>
+                        
                         <div class="d-flex gap-2">
-                            {% if proy.github %}<a href="{{ proy.github }}" target="_blank" class="btn btn-sm btn-dark w-100"><i class="bi bi-github"></i> Código</a>{% endif %}
-                            {% if proy.demo %}<a href="{{ proy.demo }}" target="_blank" class="btn btn-sm btn-success w-100"><i class="bi bi-play-circle"></i> Demo</a>{% endif %}
+                            {% if proyecto.github %}
+                            <a href="{{ proyecto.github }}" target="_blank" class="btn btn-sm btn-dark">
+                                <i class="bi bi-github"></i> <span data-es="Código" data-en="Code">Código</span>
+                            </a>
+                            {% endif %}
+                            {% if proyecto.demo %}
+                            <a href="{{ proyecto.demo }}" target="_blank" class="btn btn-sm btn-primary" style="background: var(--accent); border: none;">
+                                <i class="bi bi-link-45deg"></i> Demo
+                            </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
+                {% empty %}
+                <p data-es="No hay proyectos registrados." data-en="No projects registered.">No hay proyectos registrados.</p>
                 {% endfor %}
             </div>
         </section>
 
-        <section id="garage" class="page-section fade-in">
-            <div class="section-header"><h2 class="section-title">Venta Garage</h2></div>
+        <!-- GARAGE -->
+        <section id="garage" class="page-section">
+            <div class="section-header">
+                <h1 class="section-title" data-es="Venta Garage" data-en="Garage Sale">Venta Garage</h1>
+            </div>
+
             <div class="grid-container">
-                {% for item in garage %}
+                {% for producto in garage %}
                 <div class="fancy-card">
-                    <div class="card-img-wrap" style="height: 220px;">
-                        {% if item.imagen %}
-                        <img src="{{ item.imagen.url }}" alt="{{ item.nombreproducto }}">
+                    <div class="card-img-wrap">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombreproducto }}">
                         {% else %}
-                        <i class="bi bi-image text-muted display-1"></i>
+                            <i class="bi bi-box" style="font-size: 4rem; color: var(--secondary); display: flex; align-items: center; justify-content: center; height: 100%;"></i>
                         {% endif %}
                     </div>
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="badge {% if item.estadoproducto == 'Bueno' %}bg-success{% else %}bg-secondary{% endif %}">{{ item.estadoproducto }}</span>
-                            <h4 class="text-success m-0">${{ item.valordelbien }}</h4>
+                        <span class="badge bg-success mb-2">{{ producto.estadoproducto }}</span>
+                        <div style="font-size: 2.5rem; font-weight: 900; color: var(--accent); margin-bottom: 10px;">
+                            ${{ producto.valordelbien }}
                         </div>
-                        <h5 class="fw-bold">{{ item.nombreproducto }}</h5>
-                        <p class="small text-muted">{{ item.descripcion|truncatechars:50 }}</p>
+                        <h3 class="card-title">{{ producto.nombreproducto }}</h3>
+                        <p class="entry-description">{{ producto.descripcion }}</p>
                     </div>
+                    <a href="https://wa.me/593{{ perfil.telefono }}?text=Hola, me interesa {{ producto.nombreproducto }}" 
+                       target="_blank" 
+                       class="whatsapp-btn">
+                        <i class="bi bi-whatsapp" style="font-size: 1.5rem;"></i>
+                    </a>
                 </div>
+                {% empty %}
+                <p data-es="No hay productos en venta." data-en="No products for sale.">No hay productos en venta.</p>
                 {% endfor %}
             </div>
         </section>
-
     </main>
 
-    <div class="print-certificates">
-        <h2 class="cert-title">CERTIFICADOS</h2>
-
+    <!-- CERTIFICADOS PARA PDF -->
+    <div class="print-certificates" style="display: none;">
+        <h2 data-es="CERTIFICADOS" data-en="CERTIFICATES">CERTIFICADOS</h2>
         {% for cert in certificados %}
-            {% if cert.archivo %}
-                <div class="cert-page">
-                    <img src="{{ cert.archivo.url }}" alt="{{ cert.titulo }}">
+            {% if cert.imagen %}
+                <div style="page-break-before: always; display: flex; align-items: center; justify-content: center; min-height: 80vh;">
+                    <img src="{{ cert.imagen.url }}" alt="{{ cert.titulo }}">
                 </div>
             {% endif %}
         {% endfor %}
     </div>
 
-
+    <!-- MODAL VISTA PREVIA -->
     <div class="modal fade" id="previewModal" tabindex="-1">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title">Vista Previa</h5>
+                <div class="modal-header">
+                    <h5 class="modal-title" data-es="Vista Previa" data-en="Preview">Vista Previa</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-0 text-center bg-light" style="height: 80vh;">
-                    <img id="modalImg" src="" style="max-height: 100%; max-width: 100%; display: none; margin: auto;">
-                    <iframe id="modalPdf" src="" style="width: 100%; height: 100%; border: none; display: none;"></iframe>
+                <div class="modal-body p-0 text-center" style="max-height: 80vh; overflow: auto; background: #f8f9fa;">
+                    <img id="modalImg" src="" style="max-width: 100%; display: none;">
+                    <iframe id="modalPdf" style="width:100%; height:75vh; border:none; display:none;"></iframe>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- MODAL CONTACTO -->
+    <div class="modal fade" id="contactModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" data-es="Enviar Mensaje" data-en="Send Message">Enviar Mensaje</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="contact-form" onsubmit="sendContactForm(event)">
+                        <div class="form-group">
+                            <label class="form-label" data-es="Nombre:" data-en="Name:">Nombre:</label>
+                            <input type="text" class="form-control" id="contactName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="contactEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-es="Mensaje:" data-en="Message:">Mensaje:</label>
+                            <textarea class="form-control" id="contactMessage" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-download w-100">
+                            <i class="bi bi-send"></i> <span data-es="Enviar" data-en="Send">Enviar</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PDF OPTIONS -->
     <div class="modal fade" id="pdfOptionsModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Generar PDF</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" data-es="Generar PDF" data-en="Generate PDF">Generar PDF</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="small text-muted mb-3">Marca las secciones a incluir:</p>
+                    <p class="small text-muted mb-3" data-es="Marca las secciones a incluir:" data-en="Select sections to include:">Marca las secciones a incluir:</p>
                     <div class="row g-2">
-                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="dashboard" checked> Resumen</div>
-                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="perfil" checked> Datos</div>
-                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="formacion" checked> Educación</div>
-                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="experiencia" checked> Experiencia</div>
-                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="cursos" checked> Cursos</div>
-                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="reconocimientos" checked> Reconocimientos</div>
-                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="proyectos" checked> Proyectos</div>
+                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="dashboard" checked> <span data-es="Resumen" data-en="Summary">Resumen</span></div>
+                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="perfil" checked> <span data-es="Datos" data-en="Data">Datos</span></div>
+                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="skills" checked> <span data-es="Habilidades" data-en="Skills">Habilidades</span></div>
+                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="formacion" checked> <span data-es="Educación" data-en="Education">Educación</span></div>
+                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="experiencia" checked> <span data-es="Experiencia" data-en="Experience">Experiencia</span></div>
+                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="cursos" checked> <span data-es="Cursos" data-en="Courses">Cursos</span></div>
+                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="reconocimientos" checked> <span data-es="Reconocimientos" data-en="Awards">Reconocimientos</span></div>
+                        <div class="col-6"><input type="checkbox" class="pdf-chk" value="proyectos" checked> <span data-es="Proyectos" data-en="Projects">Proyectos</span></div>
                         <div class="col-6"><input type="checkbox" class="pdf-chk" value="garage"> Garage</div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button class="btn btn-primary" onclick="generatePDF()">Generar PDF</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" data-es="Cerrar" data-en="Close">Cerrar</button>
+                    <button class="btn btn-primary" onclick="generatePDF()" data-es="Generar PDF" data-en="Generate PDF">Generar PDF</button>
                 </div>
             </div>
         </div>
@@ -739,13 +1774,161 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+        // ===== GENERAR ICONOS TECNOLÓGICOS FLOTANTES =====
+        const particlesBg = document.getElementById('particlesBg');
         
+        const techIcons = [
+            { icon: 'bi-code-slash', class: 'code' },
+            { icon: 'bi-code-square', class: 'code' },
+            { icon: 'bi-terminal', class: 'code' },
+            { icon: 'bi-file-code', class: 'code' },
+            { icon: 'bi-braces', class: 'code' },
+            { icon: 'bi-database', class: 'database' },
+            { icon: 'bi-server', class: 'database' },
+            { icon: 'bi-hdd', class: 'database' },
+            { icon: 'bi-hdd-network', class: 'database' },
+            { icon: 'bi-cloud', class: 'cloud' },
+            { icon: 'bi-cloud-upload', class: 'cloud' },
+            { icon: 'bi-diagram-3', class: 'network' },
+            { icon: 'bi-router', class: 'network' },
+            { icon: 'bi-wifi', class: 'network' },
+            { icon: 'bi-cpu', class: 'code' },
+            { icon: 'bi-memory', class: 'code' },
+            { icon: 'bi-motherboard', class: 'code' },
+            { icon: 'bi-pc-display', class: 'network' },
+            { icon: 'bi-laptop', class: 'network' },
+            { icon: 'bi-shield-check', class: 'security' },
+            { icon: 'bi-lock', class: 'security' },
+            { icon: 'bi-key', class: 'security' },
+            { icon: 'bi-robot', class: 'ai' },
+            { icon: 'bi-cpu-fill', class: 'ai' },
+            { icon: 'bi-git', class: 'code' },
+            { icon: 'bi-github', class: 'code' },
+            { icon: 'bi-terminal-fill', class: 'code' },
+            { icon: 'bi-globe', class: 'cloud' },
+            { icon: 'bi-browser-chrome', class: 'cloud' },
+            { icon: 'bi-stack', class: 'database' }
+        ];
+        
+        for (let i = 0; i < 50; i++) {
+            const randomIcon = techIcons[Math.floor(Math.random() * techIcons.length)];
+            const icon = document.createElement('i');
+            icon.className = `bi ${randomIcon.icon} tech-icon ${randomIcon.class}`;
+            icon.style.left = Math.random() * 100 + '%';
+            icon.style.animationDelay = Math.random() * 25 + 's';
+            icon.style.animationDuration = (Math.random() * 20 + 20) + 's';
+            icon.style.fontSize = (Math.random() * 1.5 + 1.5) + 'rem';
+            particlesBg.appendChild(icon);
+        }
+
+        // ===== MODO OSCURO =====
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            document.getElementById('themeIcon').className = isDarkMode ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeIcon').className = 'bi bi-sun-fill';
+        }
+
+        // ===== MULTI-IDIOMA =====
+        let currentLang = localStorage.getItem('lang') || 'es';
+        
+        function toggleLang() {
+            currentLang = currentLang === 'es' ? 'en' : 'es';
+            localStorage.setItem('lang', currentLang);
+            document.getElementById('langText').textContent = currentLang === 'es' ? 'EN' : 'ES';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            document.querySelectorAll('[data-es][data-en]').forEach(el => {
+                const attr = el.hasAttribute('data-es-placeholder') ? 'placeholder' : 'textContent';
+                if (attr === 'placeholder') {
+                    el.placeholder = currentLang === 'es' ? el.getAttribute('data-es-placeholder') : el.getAttribute('data-en-placeholder');
+                } else {
+                    el.textContent = currentLang === 'es' ? el.getAttribute('data-es') : el.getAttribute('data-en');
+                }
+            });
+        }
+
+        if (currentLang === 'en') {
+            document.getElementById('langText').textContent = 'ES';
+            updateLanguage();
+        }
+
+        // ===== BÚSQUEDA =====
+        function filterCards(section) {
+            const input = document.getElementById(section + 'Search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById(section + 'Grid');
+            const cards = grid.getElementsByClassName('fancy-card');
+
+            Array.from(cards).forEach(card => {
+                const searchText = card.getAttribute('data-search') || '';
+                card.style.display = searchText.includes(filter) ? '' : 'none';
+            });
+        }
+
+        // ===== NÚMEROS ANIMADOS =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Aplicar width a las barras de progreso desde data-attribute
+            document.querySelectorAll('.skill-progress').forEach(bar => {
+                const width = bar.getAttribute('data-width');
+                if (width) {
+                    bar.style.width = width + '%';
+                }
+            });
+
+            const animateNumber = (element) => {
+                const target = parseInt(element.textContent);
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(current);
+                    }
+                }, 16);
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateNumber(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll('.stat-number').forEach(num => {
+                observer.observe(num);
+            });
+
+            // TECNOLOGÍAS
+            const techs = document.querySelectorAll('.project-tech');
+            techs.forEach(c => {
+                const t = c.getAttribute('data-tech');
+                if (t) {
+                    const items = t.split(',');
+                    c.innerHTML = items.map(i => `<span class="badge" style="background: linear-gradient(135deg, var(--secondary), var(--purple)); margin-right: 5px; margin-bottom: 5px;">${i.trim()}</span>`).join('');
+                }
+            });
+        });
 
         function switchTab(viewId, btn) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
-            
-            
 
             if(btn) {
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -755,41 +1938,55 @@
             if (window.innerWidth < 992) toggleSidebar();
         }
 
-        function getBtn(index) { return document.querySelectorAll('.nav-btn')[index]; }
-
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
         }
 
         const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+        
         function openModal(url) {
             const img = document.getElementById('modalImg');
             const pdf = document.getElementById('modalPdf');
 
             img.src = '';
             pdf.src = '';
+            img.style.display = 'none';
+            pdf.style.display = 'none';
 
             if (url.toLowerCase().endsWith('.pdf')) {
-                img.style.display = 'none';
-                pdf.style.display = 'block';
                 pdf.src = url;
+                pdf.style.display = 'block';
             } else {
-                pdf.style.display = 'none';
-                img.style.display = 'block';
                 img.src = url;
+                img.style.display = 'block';
             }
 
             previewModal.show();
         }
-        
-        // GENERAR PDF SIN ERRORES CORS
-        // GENERAR PDF CON PRECARGA DE IMÁGENES
-        function generatePDF() {
-            console.log('=== GENERANDO PDF ===');
+
+        // ===== FORMULARIO DE CONTACTO =====
+        function sendContactForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const message = document.getElementById('contactMessage').value;
             
+            // Aquí puedes integrar con EmailJS o tu backend
+            const whatsappMsg = `Hola, soy ${name} (${email}). ${message}`;
+            const whatsappUrl = `https://wa.me/593{{ perfil.telefono }}?text=${encodeURIComponent(whatsappMsg)}`;
+            
+            window.open(whatsappUrl, '_blank');
+            bootstrap.Modal.getInstance(document.getElementById('contactModal')).hide();
+            
+            // Limpiar formulario
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactMessage').value = '';
+        }
+
+        function generatePDF() {
             const checks = document.querySelectorAll('.pdf-chk');
             
-            // Gestionar secciones
             checks.forEach(chk => {
                 const sec = document.getElementById(chk.value);
                 if (!chk.checked && sec) {
@@ -800,24 +1997,14 @@
                 }
             });
 
-            // Verificar certificados
             const certImages = document.querySelectorAll('.print-certificates img');
-            console.log('📄 Total certificados encontrados:', certImages.length);
             
-            certImages.forEach((img, index) => {
-                console.log(`  ${index + 1}. ${img.alt || 'Sin título'}`);
-                console.log(`     URL: ${img.src}`);
-            });
-
-            // Cerrar modal
             bootstrap.Modal.getInstance(document.getElementById('pdfOptionsModal')).hide();
             
-            // PRECARGAR TODAS LAS IMÁGENES
             let loadedCount = 0;
             const totalImages = certImages.length;
             
             if (totalImages === 0) {
-                console.log('⚠️ No hay certificados para cargar');
                 setTimeout(() => {
                     window.print();
                     location.reload();
@@ -825,65 +2012,40 @@
                 return;
             }
 
-            console.log('🔄 Precargando imágenes de certificados...');
-
             function checkIfAllLoaded() {
                 loadedCount++;
-                console.log(`  ✅ Cargada ${loadedCount}/${totalImages}`);
                 
                 if (loadedCount === totalImages) {
-                    console.log('🎉 Todas las imágenes cargadas!');
-                    console.log('⏳ Esperando 1 segundo adicional...');
                     setTimeout(() => {
-                        console.log('📄 Abriendo ventana de impresión');
                         window.print();
                         setTimeout(() => location.reload(), 1000);
                     }, 1000);
                 }
             }
 
-            // Forzar recarga de cada imagen
-            certImages.forEach((img, index) => {
+            certImages.forEach((img) => {
                 const newImg = new Image();
                 newImg.crossOrigin = "anonymous";
                 
                 newImg.onload = () => {
-                    console.log(`  ✓ Imagen ${index + 1} cargada exitosamente`);
-                    // Reemplazar src para forzar re-render
                     img.src = newImg.src;
                     checkIfAllLoaded();
                 };
                 
                 newImg.onerror = () => {
-                    console.error(`  ✗ Error cargando imagen ${index + 1}: ${img.src}`);
                     checkIfAllLoaded();
                 };
                 
-                // Iniciar carga
                 newImg.src = img.src + (img.src.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
             });
 
-            // Timeout de seguridad (15 segundos)
             setTimeout(() => {
                 if (loadedCount < totalImages) {
-                    console.log('⏰ Timeout: Imprimiendo con imágenes cargadas hasta ahora');
                     window.print();
                     setTimeout(() => location.reload(), 1000);
                 }
             }, 15000);
         }
-
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const techs = document.querySelectorAll('.project-tech');
-            techs.forEach(c => {
-                const t = c.getAttribute('data-tech');
-                if (t) {
-                    const items = t.split(',');
-                    c.innerHTML = items.map(i => `<span class="badge bg-light text-primary border me-1">${i.trim()}</span>`).join('');
-                }
-            });
-        });
     </script>
 </body>
 </html>
